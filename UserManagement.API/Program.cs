@@ -20,7 +20,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        var frontendUrl = builder.Configuration["FRONTEND_URL"] ?? "http://localhost:3000";
+        policy.WithOrigins(frontendUrl, "http://localhost:3000")
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
@@ -30,7 +31,10 @@ var app = builder.Build();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapControllers();
