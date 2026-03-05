@@ -21,8 +21,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         var frontendUrl = builder.Configuration["FRONTEND_URL"] ?? "http://localhost:3000";
-        policy.WithOrigins(frontendUrl, "http://localhost:3000",
-            "https://*.vercel.app")
+         policy.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
